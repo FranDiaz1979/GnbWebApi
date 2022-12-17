@@ -1,9 +1,9 @@
 ﻿namespace Domain
 {
-    public interface IDtoRate
+    public interface IRateDto
     {
         string From { get; set; }
-        decimal Rate { get; set; }
         string To { get; set; }
+        decimal Rate { get; set; }
     }
 }

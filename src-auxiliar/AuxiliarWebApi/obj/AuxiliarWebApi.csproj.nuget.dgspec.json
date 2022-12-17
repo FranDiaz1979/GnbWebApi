@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Proyectos\\src-auxiliar\\AuxiliarWebApi\\AuxiliarWebApi.csproj": {}
+    "E:\\Proyectos\\francisco-diaz-guerrero\\src-auxiliar\\AuxiliarWebApi\\AuxiliarWebApi.csproj": {}
   },
   "projects": {
-    "E:\\Proyectos\\src-auxiliar\\AuxiliarWebApi\\AuxiliarWebApi.csproj": {
+    "E:\\Proyectos\\francisco-diaz-guerrero\\src-auxiliar\\AuxiliarWebApi\\AuxiliarWebApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Proyectos\\src-auxiliar\\AuxiliarWebApi\\AuxiliarWebApi.csproj",
+        "projectUniqueName": "E:\\Proyectos\\francisco-diaz-guerrero\\src-auxiliar\\AuxiliarWebApi\\AuxiliarWebApi.csproj",
         "projectName": "AuxiliarWebApi",
-        "projectPath": "E:\\Proyectos\\src-auxiliar\\AuxiliarWebApi\\AuxiliarWebApi.csproj",
+        "projectPath": "E:\\Proyectos\\francisco-diaz-guerrero\\src-auxiliar\\AuxiliarWebApi\\AuxiliarWebApi.csproj",
         "packagesPath": "E:\\Users\\fdiaz\\.nuget\\packages\\",
-        "outputPath": "E:\\Proyectos\\src-auxiliar\\AuxiliarWebApi\\obj\\",
+        "outputPath": "E:\\Proyectos\\francisco-diaz-guerrero\\src-auxiliar\\AuxiliarWebApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GnbWebApi", "GnbWebApi\GnbWebApi.csproj", "{82C305A2-3EBA-4EC3-A486-735E42BC1F9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "GnbWebApi\WebApi.csproj", "{82C305A2-3EBA-4EC3-A486-735E42BC1F9E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{ACC0C96D-BF37-4C99-9315-AB235F119999}"
 EndProject

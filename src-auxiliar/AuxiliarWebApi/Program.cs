@@ -13,9 +13,11 @@ Creada por Fran Diaz.");
 
 app.MapGet("/AuxiliarApi/rates.json", () => @"[
  { ""from"": ""EUR"", ""to"": ""USD"", ""rate"": ""1.359"" },
- { ""from"": ""CAD"", ""to"": ""EUR"", ""rate"": ""0.732"" },
  { ""from"": ""USD"", ""to"": ""EUR"", ""rate"": ""0.736"" },
- { ""from"": ""EUR"", ""to"": ""CAD"", ""rate"": ""1.366"" }
+ { ""from"": ""CAD"", ""to"": ""EUR"", ""rate"": ""0.732"" },
+ { ""from"": ""EUR"", ""to"": ""CAD"", ""rate"": ""1.366"" },
+ { ""from"": ""CAD"", ""to"": ""USD"", ""rate"": ""0.995"" },
+ { ""from"": ""USD"", ""to"": ""CAD"", ""rate"": ""1.005"" }
 ]");
 
 app.MapGet("/AuxiliarApi/transactions.json", () => @"[
