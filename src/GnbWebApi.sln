@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GnbWebApi", "GnbWebApi\GnbW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{ACC0C96D-BF37-4C99-9315-AB235F119999}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{36FA480B-A972-4958-9BAB-9C48A915B7B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{ACC0C96D-BF37-4C99-9315-AB235F119999}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACC0C96D-BF37-4C99-9315-AB235F119999}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACC0C96D-BF37-4C99-9315-AB235F119999}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36FA480B-A972-4958-9BAB-9C48A915B7B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36FA480B-A972-4958-9BAB-9C48A915B7B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36FA480B-A972-4958-9BAB-9C48A915B7B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36FA480B-A972-4958-9BAB-9C48A915B7B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
