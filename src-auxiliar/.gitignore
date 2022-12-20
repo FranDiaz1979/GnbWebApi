@@ -361,9 +361,3 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-
-
-#By Fran Diaz
-src-auxiliar/.vs/
-../src-auxiliar/AuxiliarWebApi/bin/*
-src-auxiliar/AuxiliarWebApi/obj/*

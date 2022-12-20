@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Infraestructure;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Json;
 
@@ -14,6 +15,14 @@ namespace Services
             response.EnsureSuccessStatusCode();
             var result = await response.Content.ReadFromJsonAsync<IEnumerable<RateDto>>();
             //result = JToken.Parse(result).ToString();
+            //
+            var ratesRepository = new RatesRepository();
+            await ratesRepository.SetAsync("1", "agua");
+
+            var resultado= await ratesRepository.GetAsync("1");
+
+
+
             return result;
         }
     }
