@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using Infraestructure;
 
 namespace Services
 {
@@ -23,12 +24,13 @@ namespace Services
             return result;
         }
 
-        public static async Task<IEnumerable<TransactionDto>> GetBySkuAsync(string sku)
+        public static async Task<TransactionTotalDto> GetBySkuAsync(string sku)
         {
             using var client = new HttpClient();
             //var response = await client.GetFromJsonAsync<IEnumerable<TransactionDto>>("http://localhost:5074/AuxiliarApi/transactions.json");
             var response = await client.GetAsync("http://localhost:5074/AuxiliarApi/transactions.json");
             response.EnsureSuccessStatusCode();
+
             var transactions = await response.Content.ReadFromJsonAsync<IEnumerable<TransactionDto>>();
             //string result = await response.Content.ReadAsStringAsync();
             //result = JToken.Parse(result).ToString();
@@ -39,8 +41,28 @@ namespace Services
             //}
 
             //var result = JToken.FromObject(transactions).ToString();
+            decimal total = 0;
+            var rateService = new RateService();
+            foreach (var transaction in transactions)
+            {
 
-            return transactions;
+                if (transaction.Currency == "EUR")
+                {
+                    total+=transaction.Amount;
+                }
+                else
+                {
+                    total += await rateService.AmountToEur(transaction.Amount, transaction.Currency);
+                }
+            }
+
+            var transactionTotalDto = new TransactionTotalDto()
+            {
+                Sku= sku,
+                Amount= total,
+            };
+
+            return transactionTotalDto;
         }
     }
 }

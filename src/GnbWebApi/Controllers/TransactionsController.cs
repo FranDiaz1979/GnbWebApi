@@ -24,7 +24,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet(Name = "GetBySkuTransactionsController")]
-        public async Task<IEnumerable<TransactionDto>> GetBySku(string sku)
+        public async Task<TransactionTotalDto> GetBySku(string sku)
         {
             var result = await TransactionService.GetBySkuAsync(sku);
             _logger.LogInformation("{DateTime}: Sku consultado.", DateTime.Now);
