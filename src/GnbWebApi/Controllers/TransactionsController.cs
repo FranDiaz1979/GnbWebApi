@@ -18,19 +18,31 @@ namespace WebApi.Controllers
         }
 
         [HttpGet(Name = "GetTransactionsController")]
-        public async Task<IEnumerable<TransactionDto>> GetAll()
+        public async Task<IActionResult> Get()
         {
             var list = await _transactionService.GetListAsysnc();
             _logger.LogInformation("{DateTime}: Transacciones consultadas.", DateTime.Now);
-            return list;
+
+            if (!list.Any())
+            {
+                return NoContent();
+            }
+
+            return Ok(list);
         }
 
         [HttpGet(Name = "GetBySkuTransactionsController")]
-        public async Task<TransactionTotalDto> GetBySku(string sku)
+        public async Task<IActionResult> GetBySku(string sku)
         {
             var result = await _transactionService.GetBySkuAsync(sku);
             _logger.LogInformation("{DateTime}: Sku consultado.", DateTime.Now);
-            return result;
+
+            if (result is null)
+            {
+                return NoContent();
+            }
+
+            return Ok(result);
         }
 
     }

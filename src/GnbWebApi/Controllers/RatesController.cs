@@ -17,12 +17,19 @@ namespace WebApi.Controllers
             this._rateService = rateService;
         }
 
+        //De esta forma swagger da más información, pero estamos acoplados al modelo
+        //[HttpGet(Name = "GetRatesController")]
+        //public async Task<IEnumerable<RateDto>> GetAll()
+        //{
+        //    _logger.LogInformation("{DateTime}: Ratios consultados.", DateTime.Now);           
+        //    return await _rateService.GetListAsync();
+        //}
+
         [HttpGet(Name = "GetRatesController")]
-        public async Task<IEnumerable<RateDto>> GetAll()
+        public async Task<IActionResult> Get()
         {
-            var rateList = await _rateService.GetListAsync();
-            _logger.LogInformation("{DateTime}: Ratios consultados.", DateTime.Now);           
-            return rateList;
+            _logger.LogInformation("{DateTime}: Ratios consultados.", DateTime.Now);
+            return Ok(await _rateService.GetListAsync());
         }
     }
 }
