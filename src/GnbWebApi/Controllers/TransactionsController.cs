@@ -9,16 +9,18 @@ namespace WebApi.Controllers
     public class TransactionsController : ControllerBase
     {
         private readonly ILogger<TransactionsController> _logger;
+        private readonly ITransactionService _transactionService;
 
-        public TransactionsController(ILogger<TransactionsController> logger)
+        public TransactionsController(ILogger<TransactionsController> logger, ITransactionService transactionService)
         {
-            _logger = logger;
+            this._logger = logger;
+            this._transactionService = transactionService;
         }
 
         [HttpGet(Name = "GetTransactionsController")]
         public async Task<IEnumerable<TransactionDto>> GetAll()
         {
-            var list = await TransactionService.GetListAsysnc();
+            var list = await _transactionService.GetListAsysnc();
             _logger.LogInformation("{DateTime}: Transacciones consultadas.", DateTime.Now);
             return list;
         }
@@ -26,7 +28,7 @@ namespace WebApi.Controllers
         [HttpGet(Name = "GetBySkuTransactionsController")]
         public async Task<TransactionTotalDto> GetBySku(string sku)
         {
-            var result = await TransactionService.GetBySkuAsync(sku);
+            var result = await _transactionService.GetBySkuAsync(sku);
             _logger.LogInformation("{DateTime}: Sku consultado.", DateTime.Now);
             return result;
         }

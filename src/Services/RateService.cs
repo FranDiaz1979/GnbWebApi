@@ -1,14 +1,15 @@
 ﻿using Domain;
 using Infraestructure;
 using Newtonsoft.Json.Linq;
+using Services;
 using System.Collections.Generic;
 using System.Net.Http.Json;
 
 namespace Services
 {
-    public class RateService
+    public class RateService : IRateService 
     {
-        public static async Task<IEnumerable<RateDto>> GetListAsysnc() 
+        public async Task<IEnumerable<RateDto>> GetListAsync() 
         {
             using var client = new HttpClient();
             //var result = await client.GetFromJsonAsync<IEnumerable<RateDto>>("http://localhost:5074/AuxiliarApi/rates.json");
@@ -24,9 +25,9 @@ namespace Services
             return listRates;
         }
 
-        internal async Task<decimal> AmountToEur(decimal amount, string currency)
+        public async Task<decimal> AmountToEur(decimal amount, string currency)
         {
-            var listRates = await GetListAsysnc();
+            var listRates = await GetListAsync();
             decimal rateEur;
             if (listRates.Any())
             {

@@ -11,9 +11,9 @@ using Infraestructure;
 
 namespace Services
 {
-    public class TransactionService
+    public class TransactionService : ITransactionService
     {
-        public static async Task<IEnumerable<TransactionDto>> GetListAsysnc()
+        public async Task<IEnumerable<TransactionDto>> GetListAsysnc()
         {
             using var client = new HttpClient();
             //var result = await client.GetFromJsonAsync<IEnumerable<TransactionDto>>("http://localhost:5074/AuxiliarApi/transactions.json");
@@ -24,7 +24,7 @@ namespace Services
             return result;
         }
 
-        public static async Task<TransactionTotalDto> GetBySkuAsync(string sku)
+        public async Task<TransactionTotalDto> GetBySkuAsync(string sku)
         {
             using var client = new HttpClient();
             //var response = await client.GetFromJsonAsync<IEnumerable<TransactionDto>>("http://localhost:5074/AuxiliarApi/transactions.json");
