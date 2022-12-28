@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Domain;
 using Services;
+using WebApi.Interfaces;
 
 namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class TransactionsController : ControllerBase
+    public class TransactionsController : ControllerBase, ITransactionsController
     {
         private readonly ILogger<TransactionsController> _logger;
         private readonly ITransactionService _transactionService;

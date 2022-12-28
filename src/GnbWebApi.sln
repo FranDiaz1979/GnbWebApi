@@ -5,11 +5,13 @@ VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "GnbWebApi\WebApi.csproj", "{82C305A2-3EBA-4EC3-A486-735E42BC1F9E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{ACC0C96D-BF37-4C99-9315-AB235F119999}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Domain\Entities.csproj", "{ACC0C96D-BF37-4C99-9315-AB235F119999}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{36FA480B-A972-4958-9BAB-9C48A915B7B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infraestructure", "Infraestructure\Infraestructure.csproj", "{D740D989-3E49-4845-A7F0-A5C0F038FA5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infraestructure", "Infraestructure\Infraestructure.csproj", "{D740D989-3E49-4845-A7F0-A5C0F038FA5A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testing", "TestGnbWebApi\Testing.csproj", "{EE57E15D-C6CD-4A49-B69C-4E0F42BB790F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{D740D989-3E49-4845-A7F0-A5C0F038FA5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D740D989-3E49-4845-A7F0-A5C0F038FA5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D740D989-3E49-4845-A7F0-A5C0F038FA5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE57E15D-C6CD-4A49-B69C-4E0F42BB790F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE57E15D-C6CD-4A49-B69C-4E0F42BB790F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE57E15D-C6CD-4A49-B69C-4E0F42BB790F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE57E15D-C6CD-4A49-B69C-4E0F42BB790F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
