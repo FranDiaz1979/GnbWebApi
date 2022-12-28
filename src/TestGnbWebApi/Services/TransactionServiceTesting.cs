@@ -2,15 +2,21 @@ namespace TestGnbWebApi.Services
 {
     using global::Domain;
     using global::Services;
+    using Infraestructure;
+    using Moq;
 
     public class TransactionServiceTesting
     {
+        private IApiClient _apiClient;
         private ITransactionService transactionService;
 
         [SetUp]
         public void Setup()
         {
-            this.transactionService = new TransactionService();
+            var mockRepository = new MockRepository(MockBehavior.Default);
+            this._apiClient = mockRepository.Create<IApiClient>().Object;
+
+            this.transactionService = new TransactionService(_apiClient);
         }
 
         [Test]

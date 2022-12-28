@@ -1,3 +1,4 @@
+using Infraestructure;
 using Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,7 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddScoped<IRateService, RateService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<IApiClient, ApiClient>();
 
 var app = builder.Build();
 
@@ -27,8 +29,5 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthorization();
-
 app.MapControllers();
-
-
 app.Run();

@@ -1,17 +1,24 @@
 namespace TestGnbWebApi.Services
 {
     using Domain;
+    using global::Domain;
     using global::Services;
+    using Infraestructure;
+    using Moq;
+    using WebApi.Controllers;
 
     public class RateServiceTesting
     {
+        private IApiClient _apiClient;
         private IRateService rateService;
-
+        
         [SetUp]
         public void Setup()
         {
-            //To-Do: Poner la creacion del servicio aqui y así serian más rapido las pruebas
-            this.rateService = new RateService();
+            var mockRepository = new MockRepository(MockBehavior.Default);
+            this._apiClient = mockRepository.Create<IApiClient>().Object;
+
+            this.rateService = new RateService(_apiClient);
         }
 
         [Test]
@@ -37,15 +44,6 @@ namespace TestGnbWebApi.Services
                 Assert.That(firstRate.To, Is.EqualTo("USD"));
                 Assert.That(firstRate.Rate, Is.EqualTo(1.359));
             });
-        }
-
-        [Test]
-        public void GetListAsync_Nok()
-        {
-            //TO-DO: Como aun no he inyectado el servicio http, aun no puedo probar por test que pasaría si no está levantado
-            var result = rateService.GetListAsync();
-
-            Assert.Fail("To Do");
         }
 
         [Test]

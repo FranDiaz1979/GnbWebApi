@@ -11,13 +11,19 @@ using Infraestructure;
 
 namespace Services
 {
+
     public class TransactionService : ITransactionService
     {
+        private readonly IApiClient _apiClient;
+
+        public TransactionService(IApiClient apiClient)
+        {
+            _apiClient = apiClient;
+        }
+
         public async Task<IEnumerable<TransactionDto>> GetListAsysnc()
         {
-            using var client = new HttpClient();
-            //var result = await client.GetFromJsonAsync<IEnumerable<TransactionDto>>("http://localhost:5074/AuxiliarApi/transactions.json");
-            var response = await client.GetAsync("http://localhost:5074/AuxiliarApi/transactions.json");
+            var response = await _apiClient.GetAsync("transactions.json");
             response.EnsureSuccessStatusCode();
             var result = await response.Content.ReadFromJsonAsync<IEnumerable<TransactionDto>>();
             //result= JToken.Parse(result);
@@ -42,7 +48,7 @@ namespace Services
 
             //var result = JToken.FromObject(transactions).ToString();
             decimal total = 0;
-            var rateService = new RateService();
+            var rateService = new RateService(_apiClient);
             foreach (var transaction in transactions)
             {
 

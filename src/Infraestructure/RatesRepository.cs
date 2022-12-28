@@ -23,7 +23,7 @@
                     SetAsync(
                         rate.From + rate.To, rate.Rate.ToString());
                 }
-            }
+            }           
         }
 
         public async Task SetAsync(string key, string value)

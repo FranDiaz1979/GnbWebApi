@@ -9,18 +9,22 @@ namespace Services
 {
     public class RateService : IRateService
     {
+        private readonly IApiClient _apiClient;
+        
+        public RateService(IApiClient apiClient)
+        {
+            this._apiClient = apiClient;
+        }
+
         public async Task<IEnumerable<RateDto>> GetListAsync()
         {
-            using var client = new HttpClient();
-            //var result = await client.GetFromJsonAsync<IEnumerable<RateDto>>("http://localhost:5074/AuxiliarApi/rates.json");
-            var response = await client.GetAsync("http://localhost:5074/AuxiliarApi/rates.json");
+            using var client = new ApiClient();
+            var response = await client.GetAsync(new Uri(client.BaseAddress, "rates.json"));
             response.EnsureSuccessStatusCode();
 
             IEnumerable<RateDto> listRates = await response.Content.ReadFromJsonAsync<IEnumerable<RateDto>>();
             var ratesRepository = new RatesRepository();
             ratesRepository.Refresh(listRates);
-
-            //result = JToken.Parse(result).ToString();
 
             return listRates;
         }
