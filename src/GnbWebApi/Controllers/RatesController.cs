@@ -1,5 +1,7 @@
 ﻿using Domain;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.IIS.Core;
 using Services;
 using WebApi.Interfaces;
 
@@ -18,13 +20,11 @@ namespace WebApi.Controllers
             this._rateService = rateService;
         }
 
-        //De esta forma swagger da más información, pero estamos acoplados al modelo
-        //[HttpGet(Name = "GetRatesController")]
-        //public async Task<IEnumerable<RateDto>> GetAll()
-        //{
-        //    _logger.LogInformation("{DateTime}: Ratios consultados.", DateTime.Now);           
-        //    return await _rateService.GetListAsync();
-        //}
+        [HttpGet]
+        public void ThrowError()
+        {
+            throw new Exception("Error producido para probar el control de errores");
+        }
 
         [HttpGet(Name = "GetRatesController")]
         public async Task<IActionResult> Get()
@@ -38,5 +38,27 @@ namespace WebApi.Controllers
             }
             return Ok(result);
         }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [Route("/error-development")]
+        public IActionResult HandleErrorDevelopment([FromServices] IHostEnvironment hostEnvironment)
+        {
+            if (!hostEnvironment.IsDevelopment())
+            {
+                return NotFound();
+            }
+
+            var exceptionHandlerFeature =
+                HttpContext.Features.Get<IExceptionHandlerFeature>()!;
+
+            return Problem(
+                detail: exceptionHandlerFeature.Error.StackTrace,
+                title: exceptionHandlerFeature.Error.Message);
+        }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [Route("/error")]
+        public IActionResult HandleError() =>
+            Problem();
     }
 }
