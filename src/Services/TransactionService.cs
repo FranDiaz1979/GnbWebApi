@@ -1,6 +1,8 @@
 ﻿using Entities;
 using Infraestructure;
+using System.Collections.Generic;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace Services
 {
@@ -15,64 +17,87 @@ namespace Services
 
         public async Task<IEnumerable<Transaction>> GetAllAsysnc()
         {
-            var response = await _apiClient.GetAsync("transactions.json");
-            response.EnsureSuccessStatusCode();
-            var result = await response.Content.ReadFromJsonAsync<IEnumerable<Transaction>>();
-            if (result is null)
-            {
-                return Enumerable.Empty<Transaction>();
-            }
-            return result;
-        }
+            var transactionRepository = new RedisRepository();
+            IEnumerable<Transaction>? transactionList;
 
-        public async Task<TransactionTotal> GetBySkuAsync(string sku)
-        {
             var response = await _apiClient.GetAsync("transactions.json");
-            decimal total = 0;
 
             if (response.IsSuccessStatusCode)
             {
-                IEnumerable<Transaction>? transactions;
-
-                transactions = await response.Content.ReadFromJsonAsync<IEnumerable<Transaction>>();
-                transactions = transactions?.Where(x => x.Sku == sku);
-
-                if (transactions is null)
+                transactionList = await response.Content.ReadFromJsonAsync<IEnumerable<Transaction>>();
+                if (transactionList is not null)
                 {
-                    return new TransactionTotal();
-                }
-
-                var rateService = new RateService(_apiClient);
-                foreach (var transaction in transactions)
-                {
-                    if (transaction.Currency == "EUR")
-                    {
-                        total += transaction.Amount;
-                    }
-                    else
-                    {
-                        total += await rateService.AmountToEur(transaction.Amount, transaction.Currency);
-                    }
+                    string cadena = await response.Content.ReadAsStringAsync();
+                    _ = transactionRepository.SetAsync("transaction", cadena ?? string.Empty);
                 }
             }
             else
             {
-                var transactionRepository = new TransactionRepository();
+                string cadena = await transactionRepository.GetAsync("transaction");
+                transactionList = JsonSerializer.Deserialize<IEnumerable<Transaction>>(cadena);
+            }
 
-                var transactionAmount = await transactionRepository.GetAsync(sku);
-                if (transactionAmount is not null)
+            if (transactionList is null)
+            {
+                return Enumerable.Empty<Transaction>();
+            }
+
+            return transactionList;
+        }
+
+
+        public async Task<TransactionTotal> GetBySkuAsync(string sku)
+        {
+            var transactionRepository = new RedisRepository();
+            IEnumerable<Transaction>? transactions;
+            decimal total = 0;
+
+            var response = await _apiClient.GetAsync("transactions.json");
+
+            if (response.IsSuccessStatusCode)
+            {
+                transactions = await response.Content.ReadFromJsonAsync<IEnumerable<Transaction>>();
+                if (transactions is not null)
                 {
-                    total = decimal.Parse(transactionAmount);
+                    string cadena = await response.Content.ReadAsStringAsync();
+                    _ = transactionRepository.SetAsync("transaction", cadena ?? string.Empty);
+                }
+            }
+            else
+            {
+                string cadena = await transactionRepository.GetAsync("transaction");
+                transactions = JsonSerializer.Deserialize<IEnumerable<Transaction>>(cadena);
+            }
+
+            transactions = transactions?.Where(x => x.Sku == sku);
+
+            if (transactions is null || !transactions.Any())
+            {
+                return new TransactionTotal();
+            }
+
+            var rateService = new RateService(_apiClient);
+            foreach (var transaction in transactions)
+            {
+                if (transaction.Currency == "EUR")
+                {
+                    total += transaction.Amount;
+                }
+                else
+                {
+                    total += await rateService.AmountToEur(transaction.Amount, transaction.Currency);
                 }
             }
 
-            var transactionTotalDto = new TransactionTotal()
+            var transactionTotal = new TransactionTotal()
             {
                 Sku = sku,
                 Amount = total,
             };
 
-            return transactionTotalDto;
-        }
+            return transactionTotal;
+        }            
     }
 }
+
+

@@ -21,11 +21,11 @@ app.MapGet("/AuxiliarApi/rates.json", () => @"[
 ]");
 
 app.MapGet("/AuxiliarApi/transactions.json", () => @"[
- { ""sku"": ""T2006"", ""amount"": ""10.05"", ""currency"": ""USD"" },
- { ""sku"": ""M2007"", ""amount"": ""34.57"", ""currency"": ""CAD"" },
- { ""sku"": ""R2008"", ""amount"": ""17.95"", ""currency"": ""USD"" },
- { ""sku"": ""T2006"", ""amount"": ""7.63"", ""currency"": ""EUR"" },
- { ""sku"": ""B2009"", ""amount"": ""21.23"", ""currency"": ""USD"" }
+ { ""Sku"": ""T2006"", ""Amount"": 10.05, ""Currency"": ""USD"" },
+ { ""Sku"": ""M2007"", ""Amount"": 34.57, ""Currency"": ""CAD"" },
+ { ""Sku"": ""R2008"", ""Amount"": 17.95, ""Currency"": ""USD"" },
+ { ""Sku"": ""T2006"", ""Amount"": 7.63,  ""Currency"": ""EUR"" },
+ { ""Sku"": ""B2009"", ""Amount"": 21.23, ""Currency"": ""USD"" }
 ]");
 
 app.Run();

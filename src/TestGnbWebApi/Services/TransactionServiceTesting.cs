@@ -26,7 +26,7 @@ namespace TestGnbWebApi.Services
         }
 
         [Test]
-        public void GetAllAsysnc_Ok()
+        public void GetAllAsync_Ok()
         {
             Assert.That(_transactionService, Is.Not.Null);
             

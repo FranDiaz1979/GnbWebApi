@@ -18,7 +18,7 @@ namespace TestGnbWebApi.Controllers
             var mockRepository = new MockRepository(MockBehavior.Default);
             this.logger = mockRepository.Create<Microsoft.Extensions.Logging.ILogger<TransactionController>>().Object;
             var mock = mockRepository.Create<ITransactionService>();
-            IEnumerable<Transaction> transactionDtos = new List<Transaction>()
+            IEnumerable<Transaction> transactions = new List<Transaction>()
             {
                 new Transaction(){
                     Sku="T2006",
@@ -26,7 +26,7 @@ namespace TestGnbWebApi.Controllers
                     Currency="EUR",
                 },
             };
-            mock.Setup(x => x.GetAllAsysnc()).Returns(Task.FromResult(transactionDtos));
+            mock.Setup(x => x.GetAllAsysnc()).Returns(Task.FromResult(transactions));
             this.transactionService = mock.Object;
             transactionController = new TransactionController(logger, transactionService);
         }

@@ -13,6 +13,16 @@
             _redisDB = RedisDB.Connection.GetDatabase();
         }
 
+        public async Task SetAsync(string key, string value)
+        {
+            await _redisDB.StringSetAsync(key, value);
+        }
+
+        public async Task<string> GetAsync(string key)
+        {
+            return (await _redisDB.StringGetAsync(key)).ToString();
+        }
+
         public async Task Refresh(IEnumerable<RateEntity> rates)
         {
             if (rates.Any())
@@ -22,16 +32,6 @@
                     await SetAsync(rate.From + rate.To, rate.Rate.ToString());
                 }
             }
-        }
-
-        public async Task SetAsync(string key, string value)
-        {
-            await _redisDB.StringSetAsync(key, value);
-        }
-
-        public async Task<string> GetAsync(string key)
-        {
-            return (await _redisDB.StringGetAsync(key)).ToString();
         }
 
         public async Task<IEnumerable<RateEntity>> GetAllAsync()

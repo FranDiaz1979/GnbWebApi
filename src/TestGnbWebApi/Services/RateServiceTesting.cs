@@ -37,7 +37,7 @@ namespace TestGnbWebApi.Services
             var rateList = result.Result;
             Assert.That(rateList, Is.Not.Null, "El resultado de GetAllAsync ha sido inesperadamente nulo");
 
-            var firstRate = rateList.First();
+            var firstRate = rateList.First(x=>x.From=="EUR" && x.To=="USD");
             Assert.Multiple(() =>
             {
                 Assert.That(firstRate.From, Is.EqualTo("EUR"));
