@@ -1,6 +1,6 @@
-﻿namespace Domain.Interfaces
+﻿namespace Entities
 {
-    public interface ITransactionTotalDto
+    public interface ITransactionTotal
     {
         string Sku { get; set; }
         decimal Amount { get; set; }

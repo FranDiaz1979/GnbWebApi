@@ -2,22 +2,19 @@
 
 namespace Infraestructure
 {
-    public class RedisDB
+    public static class RedisDB
     {
-        private static Lazy<ConnectionMultiplexer> _lazyConnection;
+        private static readonly Lazy<ConnectionMultiplexer> _lazyConnection = 
+            new(() =>
+                ConnectionMultiplexer.Connect("localhost")
+            );
+
         public static ConnectionMultiplexer Connection
         {
             get
             {
                 return _lazyConnection.Value;
             }
-        }
-        static RedisDB()
-        {
-            _lazyConnection = new Lazy<ConnectionMultiplexer>
-            (() =>
-                ConnectionMultiplexer.Connect("localhost")
-            );
         }
     }
 }

@@ -1,10 +1,11 @@
-﻿using Domain;
+﻿using Entities;
 
 namespace Services
 {
     public interface IRateService
     {
-        Task<IEnumerable<RateDto>> GetListAsync();
+        Task<IEnumerable<RateEntity>> GetAllAsync();
+
         Task<decimal> AmountToEur(decimal amount, string currency);
     }
 }

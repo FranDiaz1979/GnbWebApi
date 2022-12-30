@@ -1,22 +1,22 @@
 namespace TestGnbWebApi.Services
 {
-    using global::Domain;
     using global::Services;
     using Infraestructure;
     using Moq;
 
     public class TransactionServiceTesting
     {
-        private IApiClient _apiClient;
-        private ITransactionService transactionService;
+        private IApiClient? _apiClient;
+        private ITransactionService? _transactionService;
 
         [SetUp]
         public void Setup()
         {
-            var mockRepository = new MockRepository(MockBehavior.Default);
-            this._apiClient = mockRepository.Create<IApiClient>().Object;
+            //var mockRepository = new MockRepository(MockBehavior.Default);
+            //this._apiClient = mockRepository.Create<IApiClient>().Object;
 
-            this.transactionService = new TransactionService(_apiClient);
+            this._apiClient = new ApiClient();
+            this._transactionService = new TransactionService(_apiClient);
         }
 
         [Test]
@@ -26,13 +26,15 @@ namespace TestGnbWebApi.Services
         }
 
         [Test]
-        public void GetListAsysnc_Ok()
+        public void GetAllAsysnc_Ok()
         {
-            var task = this.transactionService.GetListAsysnc();
+            Assert.That(_transactionService, Is.Not.Null);
+            
+            var task = _transactionService!.GetAllAsysnc();
             task.Wait();
             Assert.That(task, Is.Not.Null);
 
-            var transactionList= task.Result;
+            var transactionList = task.Result;
             Assert.That(transactionList, Is.Not.Null);
 
             var firstTransaction = transactionList.First();
@@ -47,7 +49,9 @@ namespace TestGnbWebApi.Services
         [Test]
         public void GetBySkuAsync_Ok()
         {
-            var task = this.transactionService.GetBySkuAsync("T2006");
+            Assert.That(_transactionService, Is.Not.Null);
+
+            var task = _transactionService!.GetBySkuAsync("T2006");
             task.Wait();
             Assert.That(task, Is.Not.Null);
 

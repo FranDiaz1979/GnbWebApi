@@ -1,10 +1,11 @@
-﻿using Domain;
+﻿using Entities;
 
 namespace Services
 {
     public interface ITransactionService
     {
-        Task<IEnumerable<TransactionDto>> GetListAsysnc();
-        Task<TransactionTotalDto> GetBySkuAsync(string sku);
+        Task<IEnumerable<Transaction>> GetAllAsysnc();
+
+        Task<TransactionTotal> GetBySkuAsync(string sku);
     }
 }

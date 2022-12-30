@@ -2,9 +2,8 @@
 
 namespace WebApi.Interfaces
 {
-    public interface ITransactionsController
+    public interface IRateController
     {
         Task<IActionResult> Get();
-        Task<IActionResult> GetBySku(string sku);
     }
 }

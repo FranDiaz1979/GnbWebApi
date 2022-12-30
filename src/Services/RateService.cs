@@ -1,8 +1,5 @@
-﻿using Domain;
+﻿using Entities;
 using Infraestructure;
-using Newtonsoft.Json.Linq;
-using Services;
-using System.Collections.Generic;
 using System.Net.Http.Json;
 
 namespace Services
@@ -10,21 +7,35 @@ namespace Services
     public class RateService : IRateService
     {
         private readonly IApiClient _apiClient;
-        
+
         public RateService(IApiClient apiClient)
         {
             this._apiClient = apiClient;
         }
 
-        public async Task<IEnumerable<RateDto>> GetListAsync()
+        public async Task<IEnumerable<RateEntity>> GetAllAsync()
         {
-            using var client = new ApiClient();
-            var response = await client.GetAsync(new Uri(client.BaseAddress, "rates.json"));
-            response.EnsureSuccessStatusCode();
+            var response = await _apiClient.GetAsync("rates.json");
 
-            IEnumerable<RateDto> listRates = await response.Content.ReadFromJsonAsync<IEnumerable<RateDto>>();
-            var ratesRepository = new RatesRepository();
-            ratesRepository.Refresh(listRates);
+            var rateRepository = new RateRepository();
+            IEnumerable<RateEntity>? listRates;
+            if (response.IsSuccessStatusCode)
+            {
+                listRates = await response.Content.ReadFromJsonAsync<IEnumerable<RateEntity>>();
+                if (listRates is not null)
+                {
+                    await rateRepository.Refresh(listRates);
+                }
+            }
+            else
+            {
+                listRates = await rateRepository.GetAllAsync();
+            }
+
+            if (listRates is null)
+            {
+                return Enumerable.Empty<RateEntity>();
+            }
 
             return listRates;
         }
@@ -36,12 +47,12 @@ namespace Services
                 return amount;
             }
 
-            var listRates = await GetListAsync();
+            var listRates = await GetAllAsync();
             decimal rateEur;
             if (listRates.Any())
             {
                 var firstRate = listRates.FirstOrDefault(x => x.From == currency && x.To == "EUR");
-                if (firstRate is null) 
+                if (firstRate is null)
                 {
                     return 0;
                 }
@@ -50,9 +61,9 @@ namespace Services
             }
             else
             {
-                var ratesRepository = new RatesRepository();
+                var ratesRepository = new RateRepository();
                 string valor = await ratesRepository.GetAsync(currency + "EUR");
-                if (string.IsNullOrEmpty(valor)) 
+                if (string.IsNullOrEmpty(valor))
                 {
                     return 0;
                 }

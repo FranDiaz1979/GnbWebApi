@@ -1,67 +1,60 @@
-﻿using Castle.Core.Logging;
-using Domain;
+﻿using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WebApi.Controllers;
-using WebApi.Interfaces;
 
 namespace TestGnbWebApi.Controllers
 {
     public class TransactionControllerTesting
     {
-        private Microsoft.Extensions.Logging.ILogger<TransactionsController> logger;
-        private ITransactionService transactionService;
-        private TransactionsController transactionsController;
+        private Microsoft.Extensions.Logging.ILogger<TransactionController>? logger;
+        private ITransactionService? transactionService;
+        private TransactionController? transactionController;
 
         [SetUp]
         public void SetUp()
         {
             var mockRepository = new MockRepository(MockBehavior.Default);
-            this.logger = mockRepository.Create<Microsoft.Extensions.Logging.ILogger<TransactionsController>>().Object;
+            this.logger = mockRepository.Create<Microsoft.Extensions.Logging.ILogger<TransactionController>>().Object;
             var mock = mockRepository.Create<ITransactionService>();
-            IEnumerable<TransactionDto> transactionDtos = new List<TransactionDto>()
+            IEnumerable<Transaction> transactionDtos = new List<Transaction>()
             {
-                new TransactionDto(){
+                new Transaction(){
                     Sku="T2006",
                     Amount=(decimal)11.20,
                     Currency="EUR",
                 },
             };
-            mock.Setup(x => x.GetListAsysnc()).Returns(Task.FromResult(transactionDtos));
+            mock.Setup(x => x.GetAllAsysnc()).Returns(Task.FromResult(transactionDtos));
             this.transactionService = mock.Object;
-            transactionsController = new TransactionsController(logger, transactionService);
+            transactionController = new TransactionController(logger, transactionService);
         }
 
         [Test]
         public async Task Get_Ok()
         {
-            var response = await transactionsController.Get();
+            Assert.That(transactionController, Is.Not.Null);
+
+            var response = await transactionController!.Get();
             Assert.That(response, Is.Not.Null);
             Assert.That(response, Is.InstanceOf<OkObjectResult>());
 
             var value = ((OkObjectResult)response).Value;
             Assert.That(value, Is.Not.Null);
-            Assert.That(value,Is.InstanceOf<IEnumerable<TransactionDto>>());
+            Assert.That(value, Is.InstanceOf<IEnumerable<Transaction>>());
 
-            var transactionDto = ((IEnumerable<TransactionDto>)value).FirstOrDefault();
-            Assert.That(transactionDto, Is.Not.Null);
+            var transactionList = (IEnumerable<Transaction>)value!;
+            Assert.That(transactionList, Is.Not.Null);
+
+            var transaction = transactionList!.FirstOrDefault();
+            Assert.That(transaction, Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(transactionDto.Sku, Is.EqualTo("T2006"));
-                Assert.That(transactionDto.Amount, Is.EqualTo(11.20));
-                Assert.That(transactionDto.Currency, Is.EqualTo("EUR"));
+                Assert.That(transaction?.Sku, Is.EqualTo("T2006"));
+                Assert.That(transaction?.Amount, Is.EqualTo(11.20));
+                Assert.That(transaction?.Currency, Is.EqualTo("EUR"));
             });
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
         }
     }
 }

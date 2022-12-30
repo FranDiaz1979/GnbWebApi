@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using System.Collections.Generic;
-using System.Net.Http.Json;
-
-namespace Infraestructure
+﻿namespace Infraestructure
 {
     public class ApiClient : HttpClient, IApiClient
     {
@@ -16,11 +7,11 @@ namespace Infraestructure
             this.BaseAddress = new Uri("http://localhost:5074/AuxiliarApi/");
         }
 
-        new public async Task<HttpResponseMessage> GetAsync(string requestUri)
+        public new async Task<HttpResponseMessage> GetAsync(string requestUri)
         {
             if (this.BaseAddress is null)
             {
-                throw new ArgumentNullException();
+                throw new HttpRequestException("Base Adress is null");
             }
 
             if (string.IsNullOrEmpty(requestUri))
@@ -28,7 +19,15 @@ namespace Infraestructure
                 throw new ArgumentNullException(nameof(requestUri));
             }
 
-            return await base.GetAsync(new Uri(this.BaseAddress, requestUri));
+            try
+            {
+                var response = await base.GetAsync(new Uri(this.BaseAddress, requestUri));
+                return response;
+            }
+            catch
+            {
+                return new HttpResponseMessage(System.Net.HttpStatusCode.NotFound);
+            }
         }
     }
 }

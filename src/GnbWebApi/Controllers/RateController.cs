@@ -1,7 +1,5 @@
-﻿using Domain;
-using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Server.IIS.Core;
 using Services;
 using WebApi.Interfaces;
 
@@ -9,12 +7,12 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class RatesController : ControllerBase, IRatesController
+    public class RateController : ControllerBase, IRateController
     {
-        private readonly ILogger<RatesController> _logger;
+        private readonly ILogger<RateController> _logger;
         private readonly IRateService _rateService;
 
-        public RatesController(ILogger<RatesController> logger, IRateService rateService)
+        public RateController(ILogger<RateController> logger, IRateService rateService)
         {
             this._logger = logger;
             this._rateService = rateService;
@@ -23,14 +21,14 @@ namespace WebApi.Controllers
         [HttpGet]
         public void ThrowError()
         {
-            throw new Exception("Error producido para probar el control de errores");
+            throw new NotImplementedException("Error producido para probar el control de errores");
         }
 
-        [HttpGet(Name = "GetRatesController")]
+        [HttpGet(Name = "GetRateController")]
         public async Task<IActionResult> Get()
         {
             _logger.LogInformation("{DateTime}: Ratios consultados.", DateTime.Now);
-            var result = await _rateService.GetListAsync();
+            var result = await _rateService.GetAllAsync();
 
             if (!result.Any())
             {

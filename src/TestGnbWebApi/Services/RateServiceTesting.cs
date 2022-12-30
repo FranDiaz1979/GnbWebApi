@@ -1,24 +1,22 @@
 namespace TestGnbWebApi.Services
 {
-    using Domain;
-    using global::Domain;
     using global::Services;
     using Infraestructure;
     using Moq;
-    using WebApi.Controllers;
 
     public class RateServiceTesting
     {
-        private IApiClient _apiClient;
-        private IRateService rateService;
-        
+        private IApiClient? _apiClient;
+        private IRateService? _rateService;
+
         [SetUp]
         public void Setup()
         {
-            var mockRepository = new MockRepository(MockBehavior.Default);
-            this._apiClient = mockRepository.Create<IApiClient>().Object;
+            //var mockRepository = new MockRepository(MockBehavior.Default);
+            //this._apiClient = mockRepository.Create<IApiClient>().Object;
 
-            this.rateService = new RateService(_apiClient);
+            this._apiClient = new ApiClient();
+            this._rateService = new RateService(_apiClient);
         }
 
         [Test]
@@ -28,16 +26,18 @@ namespace TestGnbWebApi.Services
         }
 
         [Test]
-        public void GetListAsync_Ok()
+        public void GetAllAsync_Ok()
         {
-            var result = rateService.GetListAsync();
+            Assert.That(_rateService, Is.Not.Null);
+
+            var result = _rateService!.GetAllAsync();
             result.Wait();
-            Assert.That(result, Is.Not.Null, "Task de GetListAsync ha sido nula");
+            Assert.That(result, Is.Not.Null, "Task de GetAllAsync ha sido nula");
 
             var rateList = result.Result;
-            Assert.That(rateList, Is.Not.Null, "El resultado de GetListAsync ha sido inesperadamente nulo");
+            Assert.That(rateList, Is.Not.Null, "El resultado de GetAllAsync ha sido inesperadamente nulo");
 
-            var firstRate =  rateList.First();
+            var firstRate = rateList.First();
             Assert.Multiple(() =>
             {
                 Assert.That(firstRate.From, Is.EqualTo("EUR"));
@@ -47,28 +47,34 @@ namespace TestGnbWebApi.Services
         }
 
         [Test]
-        public void AmountToEur_Ok() 
+        public void AmountToEur_Ok()
         {
-            var result = rateService.AmountToEur((decimal)10.10,"USD").Result;
+            Assert.That(_rateService, Is.Not.Null);
+            
+            var result = _rateService!.AmountToEur((decimal)10.10, "USD").Result;
             Assert.That(result, Is.EqualTo(7.4336));
 
-            result = rateService.AmountToEur((decimal)10.10, "CAD").Result;
+            result = _rateService!.AmountToEur((decimal)10.10, "CAD").Result;
             Assert.That(result, Is.EqualTo(7.3932));
         }
 
         [Test]
         public void AmountToEur_Eur()
         {
-            var result = rateService.AmountToEur((decimal)10.10, "EUR").Result;
+            Assert.That(_rateService, Is.Not.Null);
+            
+            var result = _rateService!.AmountToEur((decimal)10.10, "EUR").Result;
             Assert.That(result, Is.EqualTo(10.10));
         }
 
         [Test]
-        public void AmountToEur_Nok() 
+        public void AmountToEur_Nok()
         {
-            var task = rateService.AmountToEur((decimal)10.10,"ZZZ");
+            Assert.That(_rateService, Is.Not.Null);
+
+            var task = _rateService!.AmountToEur((decimal)10.10, "ZZZ");
             task.Wait();
-            Assert.That(task,Is.Not.Null);
+            Assert.That(task, Is.Not.Null);
 
             var result = task.Result;
             Assert.That(result, Is.Zero);

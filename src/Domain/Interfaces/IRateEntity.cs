@@ -1,6 +1,6 @@
-﻿namespace Domain
+﻿namespace Entities
 {
-    public interface IRateDto
+    public interface IRateEntity
     {
         string From { get; set; }
         string To { get; set; }

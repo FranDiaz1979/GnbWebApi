@@ -1,6 +1,6 @@
-﻿namespace Domain
+﻿namespace Entities
 {
-    public interface ITransactionDto
+    public interface ITransaction
     {
         string Sku { get; set; }
         decimal Amount { get; set; }

@@ -1,17 +1,9 @@
-﻿using Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+﻿using Entities;
 using Infraestructure;
+using System.Net.Http.Json;
 
 namespace Services
 {
-
     public class TransactionService : ITransactionService
     {
         private readonly IApiClient _apiClient;
@@ -21,51 +13,63 @@ namespace Services
             _apiClient = apiClient;
         }
 
-        public async Task<IEnumerable<TransactionDto>> GetListAsysnc()
+        public async Task<IEnumerable<Transaction>> GetAllAsysnc()
         {
             var response = await _apiClient.GetAsync("transactions.json");
             response.EnsureSuccessStatusCode();
-            var result = await response.Content.ReadFromJsonAsync<IEnumerable<TransactionDto>>();
-            //result= JToken.Parse(result);
+            var result = await response.Content.ReadFromJsonAsync<IEnumerable<Transaction>>();
+            if (result is null)
+            {
+                return Enumerable.Empty<Transaction>();
+            }
             return result;
         }
 
-        public async Task<TransactionTotalDto> GetBySkuAsync(string sku)
+        public async Task<TransactionTotal> GetBySkuAsync(string sku)
         {
-            using var client = new HttpClient();
-            //var response = await client.GetFromJsonAsync<IEnumerable<TransactionDto>>("http://localhost:5074/AuxiliarApi/transactions.json");
-            var response = await client.GetAsync("http://localhost:5074/AuxiliarApi/transactions.json");
-            response.EnsureSuccessStatusCode();
-
-            var transactions = await response.Content.ReadFromJsonAsync<IEnumerable<TransactionDto>>();
-            //string result = await response.Content.ReadAsStringAsync();
-            //result = JToken.Parse(result).ToString();
-            transactions = transactions.Where(x => x.Sku == sku);
-            //if (!transactions.Any()) 
-            //{
-            //    return "No se han encontrado transacciones con el SKU '" + sku + "'";
-            //}
-
-            //var result = JToken.FromObject(transactions).ToString();
+            var response = await _apiClient.GetAsync("transactions.json");
             decimal total = 0;
-            var rateService = new RateService(_apiClient);
-            foreach (var transaction in transactions)
-            {
 
-                if (transaction.Currency == "EUR")
+            if (response.IsSuccessStatusCode)
+            {
+                IEnumerable<Transaction>? transactions;
+
+                transactions = await response.Content.ReadFromJsonAsync<IEnumerable<Transaction>>();
+                transactions = transactions?.Where(x => x.Sku == sku);
+
+                if (transactions is null)
                 {
-                    total+=transaction.Amount;
+                    return new TransactionTotal();
                 }
-                else
+
+                var rateService = new RateService(_apiClient);
+                foreach (var transaction in transactions)
                 {
-                    total += await rateService.AmountToEur(transaction.Amount, transaction.Currency);
+                    if (transaction.Currency == "EUR")
+                    {
+                        total += transaction.Amount;
+                    }
+                    else
+                    {
+                        total += await rateService.AmountToEur(transaction.Amount, transaction.Currency);
+                    }
+                }
+            }
+            else
+            {
+                var transactionRepository = new TransactionRepository();
+
+                var transactionAmount = await transactionRepository.GetAsync(sku);
+                if (transactionAmount is not null)
+                {
+                    total = decimal.Parse(transactionAmount);
                 }
             }
 
-            var transactionTotalDto = new TransactionTotalDto()
+            var transactionTotalDto = new TransactionTotal()
             {
-                Sku= sku,
-                Amount= total,
+                Sku = sku,
+                Amount = total,
             };
 
             return transactionTotalDto;

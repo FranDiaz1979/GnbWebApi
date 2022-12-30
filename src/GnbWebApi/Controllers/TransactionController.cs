@@ -1,28 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Domain;
+﻿using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using Services;
 using WebApi.Interfaces;
-using Microsoft.AspNetCore.Diagnostics;
 
 namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class TransactionsController : ControllerBase, ITransactionsController
+    public class TransactionController : ControllerBase, ITransactionController
     {
-        private readonly ILogger<TransactionsController> _logger;
+        private readonly ILogger<TransactionController> _logger;
         private readonly ITransactionService _transactionService;
 
-        public TransactionsController(ILogger<TransactionsController> logger, ITransactionService transactionService)
+        public TransactionController(ILogger<TransactionController> logger, ITransactionService transactionService)
         {
             this._logger = logger;
             this._transactionService = transactionService;
         }
 
-        [HttpGet(Name = "GetTransactionsController")]
+        [HttpGet(Name = "GetTransactionController")]
         public async Task<IActionResult> Get()
         {
-            var list = await _transactionService.GetListAsysnc();
+            var list = await _transactionService.GetAllAsysnc();
             _logger.LogInformation("{DateTime}: Transacciones consultadas.", DateTime.Now);
 
             if (!list.Any())
@@ -33,7 +32,7 @@ namespace WebApi.Controllers
             return Ok(list);
         }
 
-        [HttpGet(Name = "GetBySkuTransactionsController")]
+        [HttpGet(Name = "GetBySkuTransactionController")]
         public async Task<IActionResult> GetBySku(string sku)
         {
             var result = await _transactionService.GetBySkuAsync(sku);
