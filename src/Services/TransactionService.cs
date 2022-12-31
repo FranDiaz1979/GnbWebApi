@@ -9,15 +9,16 @@ namespace Services
     public class TransactionService : ITransactionService
     {
         private readonly IApiClient _apiClient;
+        private readonly IRepository _repository;
 
-        public TransactionService(IApiClient apiClient)
+        public TransactionService(IApiClient apiClient, IRepository repository)
         {
             _apiClient = apiClient;
+            _repository = repository;
         }
 
         public async Task<IEnumerable<Transaction>> GetAllAsysnc()
         {
-            var transactionRepository = new RedisRepository();
             IEnumerable<Transaction>? transactionList;
 
             var response = await _apiClient.GetAsync("transactions.json");
@@ -28,12 +29,12 @@ namespace Services
                 if (transactionList is not null)
                 {
                     string cadena = await response.Content.ReadAsStringAsync();
-                    _ = transactionRepository.SetAsync("transaction", cadena ?? string.Empty);
+                    _ = _repository.SetAsync("transaction", cadena ?? string.Empty);
                 }
             }
             else
             {
-                string cadena = await transactionRepository.GetAsync("transaction");
+                string cadena = await _repository.GetAsync("transaction");
                 transactionList = JsonSerializer.Deserialize<IEnumerable<Transaction>>(cadena);
             }
 
@@ -76,7 +77,7 @@ namespace Services
                 return new TransactionTotal();
             }
 
-            var rateService = new RateService(_apiClient);
+            var rateService = new RateService(_apiClient, _repository);
             foreach (var transaction in transactions)
             {
                 if (transaction.Currency == "EUR")

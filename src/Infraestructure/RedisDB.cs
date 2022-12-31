@@ -1,7 +1,7 @@
-﻿using StackExchange.Redis;
-
-namespace Infraestructure
+﻿namespace Infraestructure
 {
+    using StackExchange.Redis;
+    
     public static class RedisDB
     {
         private static readonly Lazy<ConnectionMultiplexer> _lazyConnection = 

@@ -13,4 +13,5 @@ echo "=================="
 "E:\sonar-scanner-msbuild-5.0.4.24009-net46\SonarScanner.MSBuild.exe" end /d:sonar.login="6685ceb1269ec2de5d6b85b46039f3edaf803b70"
 
 echo "Pulse enter para cerrar la ventana"
+
 pause

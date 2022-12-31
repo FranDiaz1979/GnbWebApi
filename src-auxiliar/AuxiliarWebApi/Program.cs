@@ -12,12 +12,12 @@ End-points:
 Creada por Fran Diaz.");
 
 app.MapGet("/AuxiliarApi/rates.json", () => @"[
- { ""from"": ""EUR"", ""to"": ""USD"", ""rate"": ""1.359"" },
- { ""from"": ""USD"", ""to"": ""EUR"", ""rate"": ""0.736"" },
- { ""from"": ""CAD"", ""to"": ""EUR"", ""rate"": ""0.732"" },
- { ""from"": ""EUR"", ""to"": ""CAD"", ""rate"": ""1.366"" },
- { ""from"": ""CAD"", ""to"": ""USD"", ""rate"": ""0.995"" },
- { ""from"": ""USD"", ""to"": ""CAD"", ""rate"": ""1.005"" }
+ { ""From"": ""EUR"", ""To"": ""USD"", ""Rate"": 1.359 },
+ { ""From"": ""USD"", ""To"": ""EUR"", ""Rate"": 0.736 },
+ { ""From"": ""CAD"", ""To"": ""EUR"", ""Rate"": 0.732 },
+ { ""From"": ""EUR"", ""To"": ""CAD"", ""Rate"": 1.366 },
+ { ""From"": ""CAD"", ""To"": ""USD"", ""Rate"": 0.995 },
+ { ""From"": ""USD"", ""To"": ""CAD"", ""Rate"": 1.005 }
 ]");
 
 app.MapGet("/AuxiliarApi/transactions.json", () => @"[

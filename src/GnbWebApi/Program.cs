@@ -11,6 +11,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddScoped<IRateService, RateService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IApiClient, ApiClient>();
+builder.Services.AddScoped<IRepository, RedisRepository>();
 
 var app = builder.Build();
 

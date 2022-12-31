@@ -8,6 +8,7 @@ namespace TestGnbWebApi.Services
     {
         private IApiClient? _apiClient;
         private IRateService? _rateService;
+        private IRepository? _repository;
 
         [SetUp]
         public void Setup()
@@ -15,8 +16,9 @@ namespace TestGnbWebApi.Services
             //var mockRepository = new MockRepository(MockBehavior.Default);
             //this._apiClient = mockRepository.Create<IApiClient>().Object;
 
+            _repository = new RedisRepository();
             this._apiClient = new ApiClient();
-            this._rateService = new RateService(_apiClient);
+            this._rateService = new RateService(_apiClient, _repository);
         }
 
         [Test]

@@ -1,43 +1,49 @@
 ﻿using Entities;
 using Infraestructure;
+using Pipelines.Sockets.Unofficial.Arenas;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace Services
 {
     public class RateService : IRateService
     {
         private readonly IApiClient _apiClient;
+        private readonly IRepository _repository;
 
-        public RateService(IApiClient apiClient)
+        public RateService(IApiClient apiClient, IRepository repository)
         {
-            this._apiClient = apiClient;
+            _apiClient = apiClient;
+            _repository = repository;
         }
 
         public async Task<IEnumerable<RateEntity>> GetAllAsync()
         {
             var response = await _apiClient.GetAsync("rates.json");
 
-            var rateRepository = new RateRepository();
-            IEnumerable<RateEntity>? listRates;
+            IEnumerable<RateEntity>? rates;
             if (response.IsSuccessStatusCode)
             {
-                listRates = await response.Content.ReadFromJsonAsync<IEnumerable<RateEntity>>();
-                if (listRates is not null)
+                var content = response.Content;
+                rates = await content.ReadFromJsonAsync<IEnumerable<RateEntity>>();
+                if (rates is not null)
                 {
-                    await rateRepository.Refresh(listRates);
+                    string cadena = await content.ReadAsStringAsync();
+                    _ = _repository.SetAsync("rates", cadena ?? string.Empty);
                 }
             }
             else
             {
-                listRates = await rateRepository.GetAllAsync();
+                string cadena = await _repository.GetAsync("rates");
+                rates = JsonSerializer.Deserialize<IEnumerable<RateEntity>>(cadena);
             }
 
-            if (listRates is null)
+            if (rates is null)
             {
                 return Enumerable.Empty<RateEntity>();
             }
 
-            return listRates;
+            return rates;
         }
 
         public async Task<decimal> AmountToEur(decimal amount, string currency)
@@ -61,13 +67,16 @@ namespace Services
             }
             else
             {
-                var ratesRepository = new RateRepository();
-                string valor = await ratesRepository.GetAsync(currency + "EUR");
-                if (string.IsNullOrEmpty(valor))
+                var repository = new RedisRepository();
+                string cadena = await repository.GetAsync("rates");
+                listRates = JsonSerializer.Deserialize<IEnumerable<RateEntity>>(cadena);
+                var rate = listRates?.FirstOrDefault(x=>x.From==currency && x.To=="EUR");
+                
+                if (rate is null)
                 {
                     return 0;
                 }
-                rateEur = Convert.ToDecimal(valor);
+                rateEur = rate.Rate;
             }
 
             return amount * rateEur;

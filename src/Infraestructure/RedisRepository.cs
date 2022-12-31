@@ -2,11 +2,11 @@
 {
     using StackExchange.Redis;
 
-    public class TransactionRepository
+    public class RedisRepository : IRepository
     {
         private readonly IDatabase _redisDB;
 
-        public TransactionRepository()
+        public RedisRepository()
         {
             _redisDB = RedisDB.Connection.GetDatabase();
         }

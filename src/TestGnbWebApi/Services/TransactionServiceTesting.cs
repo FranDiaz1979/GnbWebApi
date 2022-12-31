@@ -8,6 +8,7 @@ namespace TestGnbWebApi.Services
     {
         private IApiClient? _apiClient;
         private ITransactionService? _transactionService;
+        private IRepository? _repository;
 
         [SetUp]
         public void Setup()
@@ -16,7 +17,8 @@ namespace TestGnbWebApi.Services
             //this._apiClient = mockRepository.Create<IApiClient>().Object;
 
             this._apiClient = new ApiClient();
-            this._transactionService = new TransactionService(_apiClient);
+            _repository = new RedisRepository();
+            this._transactionService = new TransactionService(_apiClient, _repository);
         }
 
         [Test]
