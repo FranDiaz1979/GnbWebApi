@@ -98,8 +98,8 @@ Control de errores
 Comprobacion de errores con SonarQube
 Swagger
 Mocking: moq
+Logging: NLog, con consola y fichero en C:/Logs/GnbWebApi/{fecha}.log, el layout es mi forma preferida de verlo, aunque el nivel minimo que uso es warning, no information
 
-TO-DO: Inyectar NLog u otro como logger
 TO-DO: Resolver problema de las monedas
 TO-DO: Redondeo half to even
 
