@@ -84,29 +84,30 @@ Después de cada conversión, el resultado debe ser redondeado a dos decimales u
  
 # **Solución aplicada**
 
-##Stack
+## Stack
 WebApis auxiliares con minimal api en .Net 6
 
 Solución principal:
-.Net 6
-Redis
-Pruebas con NUnit (unitarias y de integración, probadas con webapis levantadas y sin levantar, entrando en accion redis como fuente de datos), no están todas, son un ejemplo
-Separado por N capas: La capa principal es la de servicio, las demas están desacopladas, la capa webapi (aplicacion) ni siquiera sabe con que entidades está trabajando.
-Principios Solid
-Inversion de Dependencias
-Control de errores
-Comprobacion de errores con SonarQube
-Swagger
-Mocking: moq
-Logging: NLog, con consola y fichero en C:/Logs/GnbWebApi/{fecha}.log, el layout es mi forma preferida de verlo, aunque el nivel minimo que uso es warning, no information
+* .Net 6
+* Redis
+* Pruebas con NUnit (unitarias y de integración, probadas con webapis levantadas y sin levantar, entrando en accion redis como fuente de datos), no están todas, son un ejemplo
+* Separado por N capas: La capa principal es la de servicio, las demas están desacopladas, la capa webapi (aplicacion) ni siquiera sabe con que entidades está trabajando.
+* Principios Solid
+* Inversion de Dependencias
+* Control de errores
+* Comprobacion de errores con SonarQube
+* Swagger
+* Mocking: moq
+* Logging: NLog, con consola y fichero en C:/Logs/GnbWebApi/{fecha}.log, el layout es mi forma preferida de verlo, aunque el nivel minimo que uso es warning, no information
 
 TO-DO: Resolver problema de las monedas
+
 TO-DO: Redondeo half to even
 
-##Setup
-Tener instalado redis en local y levantado
-Abrir la solucion auxiliar, levantarla para que las webapis pasen info a la solución principal, dejarla sin levantar para que la info venga de redis
-Ejecutar la solución principal
-Para SonarQube, he levantado un contenedor docker que tenia preparado con persistencia. Requiere Java.
+## Setup
+* Tener instalado redis en local y levantado
+* Abrir la solucion auxiliar, levantarla para que las webapis pasen info a la solución principal, dejarla sin levantar para que la info venga de redis
+* Ejecutar la solución principal
+* Para SonarQube, he levantado un contenedor docker que tenia preparado con persistencia. Requiere Java.
  
  
